@@ -1,5 +1,7 @@
 A Vim plugin to remove excessive white space and annoyances from files.
 
+[Mirror](http://www.vim.org/scripts/script.php?script_id=3920)
+
 # Features
 
 * Strips visible ^M's from the end of lines.
