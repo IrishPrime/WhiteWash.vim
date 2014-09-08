@@ -1,23 +1,22 @@
-A Vim plugin to remove excessive white space and annoyances from files.
+A Vim plugin to remove excessive whitespace from files.
 
 [Mirror](http://www.vim.org/scripts/script.php?script_id=3920)
 
 # Features
 
-* Strips visible ^M's from the end of lines.
-* Removes white space at the end of lines.
-* Removes sequential white space between words.
-* Ignores white space at the beginning of a line (to preserve indents).
+* Removes whitespace at the end of lines.
+* Removes sequential whitespace between words.
+* Ignores whitespace at the beginning of a line (to preserve indents).
 
 # Options
 
-* WhiteWash\_Aggressive - Causes aggressive behavior by default. If enabled, removes sequential white space anywhere but the beginning of a line.
+* WhiteWash\_Aggressive - Causes aggressive behavior by default. If enabled, removes sequential whitespace anywhere but the beginning of a line.
 ```vim
 let g:WhiteWash_Aggressive = 1
 ```
 
 # Functions
 
-* `:WhiteWash` - Strips trailing ^M's, trailing white space, and calls WhiteWashLazy or WhiteWashAggressive based on user preferences.
-* `:WhiteWashLazy` - Removes sequential white space between word characters, but not between punctuation.
-* `:WhiteWashAggressive` - Removes sequential white space anywhere but the beginning of a line.
+* `:WhiteWash` - Strips trailing ^M's, trailing whitespace, and calls WhiteWashLazy or WhiteWashAggressive based on user preferences.
+* `:WhiteWashLazy` - Removes sequential whitespace between word characters, but not between punctuation.
+* `:WhiteWashAggressive` - Removes sequential whitespace anywhere but the beginning of a line.
