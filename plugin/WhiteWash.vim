@@ -2,7 +2,7 @@
 " Remove trailing whitespace and sequential whitespace between words.
 
 " Maintainer: Michael O'Neill <irish.dot@gmail.com>
-" Version:    1.0.1
+" Version:    1.1.0
 " GetLatestVimScripts: 3920 1 :AutoInstall: WhiteWash.vim
 
 function! s:white_wash()
@@ -17,6 +17,11 @@ function! s:white_wash()
 		call s:remove_sequential_space_aggressive()
 	else
 		call s:remove_sequential_space_friendly()
+	endif
+
+	" Optionally add commas after spaces
+	if exists("g:WhtieWash_Commas") && (g:WhiteWash_Commas)
+		call s:add_space_after_commas()
 	endif
 
 	" Restore cursor position
@@ -38,8 +43,15 @@ function! s:remove_sequential_space_friendly()
 	s/\>\s\{2,\}/ /eg
 endfunction
 
+function! s:add_space_after_commas()
+	" Add a space after commas which do not appear to be part of a large
+	" number (e.g. 1,234,567,890), quietly.
+	s/\S,\zs\ze\(\d\{3\}\|\s\|\\\)\@!/ /eg
+endfunction
+
 " :Commands
 command! -range=% WhiteWash silent <line1>,<line2> call <SID>white_wash()
 command! -range=% WhiteWashAggressive silent <line1>,<line2> call <SID>remove_sequential_space_aggressive()
 command! -range=% WhiteWashFriendly silent <line1>,<line2> call <SID>remove_sequential_space_friendly()
 command! -range=% WhiteWashTrailing silent <line1>,<line2> call <SID>remove_trailing_space()
+command! -range=% WhiteWashCommas silent <line1>,<line2> call <SID>add_space_after_commas()
