@@ -1,4 +1,4 @@
-A Vim plugin to remove excessive whitespace from files.
+A Vim plugin to add and remove whitespace from files for cleaner reading.
 
 [Mirror](http://www.vim.org/scripts/script.php?script_id=3920)
 
@@ -8,6 +8,9 @@ A Vim plugin to remove excessive whitespace from files.
 * Removes sequential whitespace between words.
 * Ignores whitespace at the beginning of a line (to preserve indents).
 * Operates on the entire buffer by default, or a range if provided.
+* Adds spaces after commas in non-numeric strings.
+	* Changes `foo(bar,baz,boo)` to `foo(bar, baz, boo)`.
+	* Ignores large numbers (e.g. `1,234,456,789`), but not `foo(0,1)`.
 
 # Options
 
@@ -16,8 +19,14 @@ A Vim plugin to remove excessive whitespace from files.
 let g:WhiteWash_Aggressive = 1
 ```
 
+* `WhiteWash_Commas` - Add spaces after commas by default.
+```vim
+let g:WhiteWash_Commas = 1
+```
+
 # Commands
 
-* `:WhiteWash` - Strips trailing whitespace, and calls `WhiteWashFriendly` or `WhiteWashAggressive` based on user preferences.
+* `:WhiteWash` - Strips trailing whitespace, and performs other whitespace cleaning operations based on user preference.
 * `:WhiteWashAggressive` - Removes sequential whitespace anywhere but the beginning of a line.
 * `:WhiteWashFriendly` - Removes sequential whitespace between word characters, but not between punctuation.
+* `:WhiteWashCommas` - Adds a space after commas in strings which don't look like large numbers.
