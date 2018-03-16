@@ -68,8 +68,8 @@ function! s:add_space_after_commas(aggressive)
 endfunction
 
 " :Commands
-command! -range=% WhiteWash <line1>,<line2> call <SID>white_wash(v:null)
-command! -range=% WhiteWashAggressive <line1>,<line2> call <SID>white_wash(1)
-command! -range=% WhiteWashCommas <line1>,<line2> call <SID>add_space_after_commas(g:WhiteWash.aggressive.commas)
-command! -range=% WhiteWashSequential <line1>,<line2> call <SID>remove_sequential_space(g:WhiteWash.aggressive.sequential)
+command! -range=% -nargs=? WhiteWash <line1>,<line2> call <SID>white_wash(v:null)
+command! -range=% -nargs=? WhiteWashAggressive <line1>,<line2> call <SID>white_wash(1)
+command! -range=% -nargs=? WhiteWashCommas <line1>,<line2> call <SID>add_space_after_commas(g:WhiteWash.aggressive.commas)
+command! -range=% -nargs=? WhiteWashSequential <line1>,<line2> call <SID>remove_sequential_space(g:WhiteWash.aggressive.sequential)
 command! -range=% WhiteWashTrailing <line1>,<line2> call <SID>remove_trailing_space()

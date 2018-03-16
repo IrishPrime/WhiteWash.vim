@@ -4,7 +4,7 @@ Author:  Michael "Irish" O'Neill
 License: Same terms as Vim itself (see |license|)
 
 ==============================================================================
-FEATURES                                                 *WhiteWash* *whitewash*
+FEATURES                                                          *whitewash*
 
 * Remove trailing whitespace. |WhiteWashTrailing|
 * Remove sequential whitespace. |WhiteWashSequential|
@@ -12,7 +12,13 @@ FEATURES                                                 *WhiteWash* *whitewash*
 * Optional aggressive mode. |WhiteWashAggressive|
 
 ==============================================================================
-COMMANDS                               *WhiteWash-commands* *whitewash-commands*
+RULES                                                       *whitewash-rules*
+
+==============================================================================
+EXAMPLES                                                 *whitewash-examples*
+
+==============================================================================
+COMMANDS                                                 *whitewash-commands*
 
 								  *:WhiteWash*
 :[range]WhiteWash	Run all |WhiteWash| rules enabled in |WhiteWash.auto|.
@@ -65,3 +71,5 @@ OPTIONS                                  *WhiteWash-options* *whitewash-options*
 WhiteWash.auto                                                *WhiteWash.auto*
 
 WhiteWash.aggressive                                    *WhiteWash.aggressive*
+
+ vim:tw=78:ts=8:ft=help:norl:
