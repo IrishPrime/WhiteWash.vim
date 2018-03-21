@@ -60,7 +60,7 @@ function! s:add_space_after_commas(aggressive)
 	if a:aggressive == 0
 		" Add a space after commas which do not appear to be part of a large
 		" number (e.g. 1,234,567,890), quietly.
-		s/\S,\zs\ze\(\(\d\d\d\(\D\|$\)\)\|\\\)\@!\S/ /eg
+		s/\S,\zs\ze\(\(\d\d\d\(\D\|$\)\)\|\\\|[{}]\)\@!\S/ /eg
 	else
 		" Add a space after all cramped commas, quietly.
 		s/\S,\zs\ze\S/ /eg

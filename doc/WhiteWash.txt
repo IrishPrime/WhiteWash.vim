@@ -14,26 +14,74 @@ FEATURES                                                          *whitewash*
 ==============================================================================
 RULES                                                       *whitewash-rules*
 
+WhiteWash can perform several different operations when invoked, each of which
+can be enabled or disabled, and some of which have an "aggressive" mode.
+See |whitewash-examples| for more.
+
+                                                   *whitewash-rules-trailing*
+1. Trailing - All whitespace at the end of a line is removed.
+                                                 *whitewash-rules-sequential*
+2. Sequential - Consecutive whitespace characters between words is reduced to
+   a single space character. In aggressive mode, this also collapses tabs and
+   spaces used for alignment after punctuation. This rule never modifies
+   leading whitespace so as not to disturb indentation.
+                                                     *whitewash-rules-commas*
+3. Commas - A single space is added after commas. Some effort is made to not
+   disrupt numbers using commas as a digit separator, count modifiers to
+   regular expressions, etc., but exercise caution when using this on the
+   whole buffer. In aggressive mode, a single space is added after every comma
+   which is missing one, regardless of its context.
+
 ==============================================================================
 EXAMPLES                                                 *whitewash-examples*
+
+It may be useful to `:set list` in order to see all changes. Changed and
+unchanged lines are prefixed with a + and - respectively.
+
+Before~
+* Trailing whitespace.        
+* foo(bar,baz,rab)
+* 123,456,789
+* Some  keyboards  have    a  really  sensitive space   bar.    Also this.
+* Version:        2.0.0 (Spaces)
+* Version:	2.0.0 (Tab)
+* s/\S\zs\s\{2,\}/ /eg
+
+After WhiteWash~
++ Trailing whitespace.
++ foo(bar, baz, rab)
+- 123,456,789
++ Some keyboards have a really sensitive space bar.    Also this.
+- Version:        2.0.0 (Spaces)
+- Version:	2.0.0 (Tab)
+- s/\S\zs\s\{2,\}/ /eg
+
+After WhiteWashAggressive~
++ Trailing whitespace.
++ foo(bar, baz, rab)
++ 123, 456, 789
++ Some keyboards have a really sensitive space bar. Also this.
++ Version: 2.0.0 (Spaces)
+- Version:	2.0.0 (Tab)
++ s/\S\zs\s\{2, \}/ /eg
 
 ==============================================================================
 COMMANDS                                                 *whitewash-commands*
 
+All commands accept a [range]. If a [range] is not given, the command will act
+on the entire buffer.
+
 								  *:WhiteWash*
 :[range]WhiteWash	Run all |WhiteWash| rules enabled in |WhiteWash.auto|.
 			By default, all rules are enabled, but the aggressive
-			mode is not. If a [range] is not given, act on the
-			entire buffer.
+			mode is not.
 
 :[range]WhiteWashAggressive         *:WhiteWashAggressive* *WhiteWashAggressive*
 			Run all |WhiteWash| rules enabled in |WhiteWash.auto|
 			as if their |WhiteWash.aggressive| setting were
-			enabled. If a [range] is not given, act on the entire
-			buffer. Aggressive mode can be made the default on a
-			per-rule basis. >
- let g:WhiteWash.aggressive.<rule> = 1
-<
+			enabled. Aggressive mode can be made the default on a
+			per-rule basis.
+
                                             *:WhiteWashCommas* *WhiteWashCommas*
 :[range]WhiteWashCommas Run the "commas" rule, which will add a single space
 			after every comma which is not already followed by
@@ -43,33 +91,42 @@ COMMANDS                                                 *whitewash-commands*
 			changed, but 12,34,56 will). In aggressive mode, add a
 			space after every comma not already followed by space,
 			regardless of what the rest of the string looks like.
-			If a [range] is not given, act on the entire buffer.
-			This rule is enabled default and will be run whenever
-			|:WhiteWash| is called.
+
 			Note Be very careful using this around regular
 			expressions or other parsing code, especially in
 			aggressive mode.
->
- let g:WhiteWash.auto.commas = 0       " Do not run this rule by default
- let g:WhiteWash.aggressive.commas = 1 " Enable aggressive mode by default
-<
+
 :[range]WhiteWashSequential         *:WhiteWashSequential* *WhiteWashSequential*
 			Run the "sequential" rule, which will remove
 			sequential spaces between words. This includes things
 			like two spaces after a period, but excludes things
 			like leading tabs so as not to destroy indenting.
->
- let g:WhiteWash.auto.sequential = 0       " Do not run this rule by default
- let g:WhiteWash.aggressive.sequential = 1 " Enable aggressive mode by default
-<
-:[range]WhiteWashTrailing               *:WhiteWashTrailing* *WhiteWashTrailing*
 
+:[range]WhiteWashTrailing               *:WhiteWashTrailing* *WhiteWashTrailing*
+			Run the "trailing" rule, which will remove all
+			whitespace after the last non-whitespace character
+			until the end of the line.
 
 ==============================================================================
 OPTIONS                                  *WhiteWash-options* *whitewash-options*
 
 WhiteWash.auto                                                *WhiteWash.auto*
-
-WhiteWash.aggressive                                    *WhiteWash.aggressive*
-
+Set which rules to run when calling |:WhiteWash|. A value of 0 is considered
+disabled, all other values are considered enabled. All rules are enabled by
+default.
+>
+ " Set to 0 to disable a rule
+ let g:WhiteWash.auto.commas = 0
+ let g:WhiteWash.auto.sequential = 0
+ let g:WhiteWash.auto.trailing = 0
+<
+g:WhiteWash.aggressive                                  *WhiteWash.aggressive*
+Set whether the aggressive mode should be used by default on a per rule basis.
+0 is considered disabled, all other values are considered enabled. Aggressive
+mode is disabled by default.
+>
+ " Set to a non-zero value to enable aggressive mode
+ let g:WhiteWash.aggressive.commas = 1
+ let g:WhiteWash.aggressive.sequential = 1
+<
  vim:tw=78:ts=8:ft=help:norl:
