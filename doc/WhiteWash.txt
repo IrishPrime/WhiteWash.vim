@@ -85,27 +85,26 @@ on the entire buffer.
                                             *:WhiteWashCommas* *WhiteWashCommas*
 :[range]WhiteWashCommas Run the "commas" rule, which will add a single space
 			after every comma which is not already followed by
-			whitespace. By default, effort is made to avoid adding
-			spaces to anything that looks like a number using
-			commas for digit grouping (e.g. 123,456 will not be
-			changed, but 12,34,56 will). In aggressive mode, add a
-			space after every comma not already followed by space,
-			regardless of what the rest of the string looks like.
+			whitespace.
 
-			Note Be very careful using this around regular
+			Note: Be very careful using this around regular
 			expressions or other parsing code, especially in
 			aggressive mode.
 
+			See |whitewash-rules-commas| for more.
+
 :[range]WhiteWashSequential         *:WhiteWashSequential* *WhiteWashSequential*
 			Run the "sequential" rule, which will remove
-			sequential spaces between words. This includes things
-			like two spaces after a period, but excludes things
-			like leading tabs so as not to destroy indenting.
+			sequential spaces between words.
+
+			See |whitewash-rules-sequential| for more.
 
 :[range]WhiteWashTrailing               *:WhiteWashTrailing* *WhiteWashTrailing*
 			Run the "trailing" rule, which will remove all
 			whitespace after the last non-whitespace character
 			until the end of the line.
+
+			See |whitewash-rules-trailing| for more.
 
 ==============================================================================
 OPTIONS                                  *WhiteWash-options* *whitewash-options*
