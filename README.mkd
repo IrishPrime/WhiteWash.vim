@@ -1,4 +1,5 @@
-A Vim plugin to add and remove whitespace from files for cleaner reading.
+A Vim plugin to add and remove whitespace from files for opinionated tidiness
+and (hopefully) enhanced readability.
 
 [Mirror](http://www.vim.org/scripts/script.php?script_id=3920)
 
@@ -6,27 +7,35 @@ A Vim plugin to add and remove whitespace from files for cleaner reading.
 
 * Removes whitespace at the end of lines.
 * Removes sequential whitespace between words.
-* Ignores whitespace at the beginning of a line (to preserve indents).
-* Operates on the entire buffer by default, or a range if provided.
+	* Ignores whitespace at the beginning of a line (to preserve indents).
 * Adds spaces after commas in non-numeric strings.
 	* Changes `foo(bar,baz,boo)` to `foo(bar, baz, boo)`.
 	* Ignores large numbers (e.g. `1,234,456,789`), but not `foo(0,1)`.
+* Operates on the entire buffer by default, or a range if provided.
+* Aggressive mode for when you know better than the safeguards.
 
 # Options
 
-* `WhiteWash_Aggressive` - Causes aggressive behavior by default. If enabled, removes sequential whitespace anywhere but the beginning of a line.
+* `g:WhiteWash.auto` - Enabled rules are run whenever `:WhiteWash` is called.
 ```vim
-let g:WhiteWash_Aggressive = 1
+" Set to 0 to disable a rule
+let g:WhiteWash.auto.commas = 0
+let g:WhiteWash.auto.sequential = 0
+let g:WhiteWash.auto.trailing = 0
 ```
 
-* `WhiteWash_Commas` - Add spaces after commas by default.
+* `g:WhiteWash.aggressive` - Define which rules should run with aggressive mode
+  by default.
 ```vim
-let g:WhiteWash_Commas = 1
+let g:WhiteWash.aggressive.commas = 1
+let g:WhiteWash.aggressive.sequential = 1
 ```
 
 # Commands
 
-* `:WhiteWash` - Strips trailing whitespace, and performs other whitespace cleaning operations based on user preference.
-* `:WhiteWashAggressive` - Removes sequential whitespace anywhere but the beginning of a line.
-* `:WhiteWashFriendly` - Removes sequential whitespace between word characters, but not between punctuation.
-* `:WhiteWashCommas` - Adds a space after commas in strings which don't look like large numbers.
+* `:WhiteWash` - Run all enabled WhiteWash rules.
+* `:WhiteWashAggressive` - Run all enabled WhiteWash rules in aggressive mode.
+* `:WhiteWashCommas` - Run only the commas rule (respects aggressive setting).
+* `:WhiteWashSequential` - Run only the sequential rule (respects aggressive
+  setting).
+* `:WhiteWashTrailing` - Remove trailing whitespace.
