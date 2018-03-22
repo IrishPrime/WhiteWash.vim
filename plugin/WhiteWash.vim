@@ -2,26 +2,39 @@
 " Remove trailing whitespace and sequential whitespace between words.
 
 " Maintainer: Michael O'Neill <irish.dot@gmail.com>
-" Version:    1.1.0
+" Version:    2.0.0
 " GetLatestVimScripts: 3920 1 :AutoInstall: WhiteWash.vim
 
-function! s:white_wash()
+" Set default options
+let g:WhiteWash = {
+	\ 'auto': {
+		\ 'commas': 1,
+		\ 'sequential': 1,
+		\ 'trailing': 1,
+	\ },
+	\ 'aggressive': {
+		\ 'commas': 0,
+		\ 'sequential': 0,
+	\ },
+\ }
+
+function! s:white_wash(aggressive)
 	" Save cursor position
-	let l:save_cursor = getpos(".")
+	let l:save_cursor = getpos('.')
 
-	" Remove trailing whitespace, quietly.
-	call s:remove_trailing_space()
-
-	" Remove sequential whitespace with one of two options.
-	if exists("g:WhiteWash_Aggressive") && (g:WhiteWash_Aggressive)
-		call s:remove_sequential_space_aggressive()
-	else
-		call s:remove_sequential_space_friendly()
+	if g:WhiteWash.auto.trailing
+		" Remove trailing whitespace if enabled
+		call s:remove_trailing_space()
 	endif
 
-	" Optionally add commas after spaces
-	if exists("g:WhtieWash_Commas") && (g:WhiteWash_Commas)
-		call s:add_space_after_commas()
+	if g:WhiteWash.auto.sequential
+		" Remove sequential whitespace if enabled
+		call s:remove_sequential_space(g:WhiteWash.aggressive.sequential || a:aggressive)
+	endif
+
+	if g:WhiteWash.auto.commas
+		" Add space after commas if enabled
+		call s:add_space_after_commas(g:WhiteWash.aggressive.commas || a:aggressive)
 	endif
 
 	" Restore cursor position
@@ -33,25 +46,30 @@ function! s:remove_trailing_space()
 	s/\s\+$//e
 endfunction
 
-function! s:remove_sequential_space_aggressive()
-	" Remove all sequential whitespace following non-whitespace, quietly.
-	s/\S\zs\s\{2,\}/ /eg
+function! s:remove_sequential_space(aggressive)
+	if a:aggressive == 0
+		" Remove sequential whitespace between words, quietly.
+		s/\>\s\{2,\}/ /eg
+	else
+		" Remove all sequential whitespace following non-whitespace, quietly.
+		s/\S\zs\s\{2,\}/ /eg
+	endif
 endfunction
 
-function! s:remove_sequential_space_friendly()
-	" Remove sequential whitespace between words, quietly.
-	s/\>\s\{2,\}/ /eg
-endfunction
-
-function! s:add_space_after_commas()
-	" Add a space after commas which do not appear to be part of a large
-	" number (e.g. 1,234,567,890), quietly.
-	s/\S,\zs\ze\(\d\{3\}\|\s\|\\\)\@!/ /eg
+function! s:add_space_after_commas(aggressive)
+	if a:aggressive == 0
+		" Add a space after commas which do not appear to be part of a large
+		" number (e.g. 1,234,567,890), quietly.
+		s/\S,\zs\ze\(\(\d\d\d\(\D\|$\)\)\|\\\|[{}]\)\@!\S/ /eg
+	else
+		" Add a space after all cramped commas, quietly.
+		s/\S,\zs\ze\S/ /eg
+	endif
 endfunction
 
 " :Commands
-command! -range=% WhiteWash silent <line1>,<line2> call <SID>white_wash()
-command! -range=% WhiteWashAggressive silent <line1>,<line2> call <SID>remove_sequential_space_aggressive()
-command! -range=% WhiteWashFriendly silent <line1>,<line2> call <SID>remove_sequential_space_friendly()
-command! -range=% WhiteWashTrailing silent <line1>,<line2> call <SID>remove_trailing_space()
-command! -range=% WhiteWashCommas silent <line1>,<line2> call <SID>add_space_after_commas()
+command! -range=% -nargs=? WhiteWash <line1>,<line2> call <SID>white_wash(v:null)
+command! -range=% -nargs=? WhiteWashAggressive <line1>,<line2> call <SID>white_wash(1)
+command! -range=% -nargs=? WhiteWashCommas <line1>,<line2> call <SID>add_space_after_commas(g:WhiteWash.aggressive.commas)
+command! -range=% -nargs=? WhiteWashSequential <line1>,<line2> call <SID>remove_sequential_space(g:WhiteWash.aggressive.sequential)
+command! -range=% WhiteWashTrailing <line1>,<line2> call <SID>remove_trailing_space()
